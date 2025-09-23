@@ -25,6 +25,9 @@ public class Article {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    /*
+    * 정적 팩토리 메소드 : 엔티티 객체를 생성하는 책임
+    * */
     public static Article create(Long articleId, String title, String content, Long boardId, Long writerId) {
         Article article = new Article();
         article.articleId = articleId;
@@ -37,6 +40,9 @@ public class Article {
         return article;
     }
 
+    /*
+    * update 메소드 : 엔티티 구성요소를 수정하는 책임
+    * */
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
