@@ -38,11 +38,21 @@ public class ArticleController {
         return articleService.readAllInfiniteScroll(boardId, pageSize, lastArticleId);
     }
 
+    /*
+    * PostMapping
+    * - 요청시 자원 그 자체(컬렉션 혹은 객체)를 나타낸다.
+    * - 멱등성을 보장할 수 없다(해당 특정자원에 대해 여러번 생성요청을 하면 그만큼의 별도 결과들이 생성)
+    * */
     @PostMapping("/v1/articles")
     public ArticleResponse create(@RequestBody ArticleCreateRequest request) {
         return articleService.create(request);
     }
 
+    /*
+    * PutMapping
+    * - 요청시 특정자원(id)를 나타낸다.
+    * - 멱등성을 보장할 수 있다(해당 특정자원에 대해 여러번 수정요청을 하여도 결과는 동일)
+    * */
     @PutMapping("/v1/articles/{articleId}")
     public ArticleResponse update(@PathVariable Long articleId, @RequestBody ArticleUpdateRequest request) {
         return articleService.update(articleId, request);

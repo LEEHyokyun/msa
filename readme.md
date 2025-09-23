@@ -33,3 +33,8 @@
 - 프로젝트 규모가 클 수록 하나의 DTO로 모든 데이터 요청/응답에 대응하는 것이 어렵다.
 - 요청책임을 세분화하여 관리할 수 있으며, Swagger 등 문서화 관리에도 유리하다.
 
+## 6. Project Design - "REST API Seperation"
+
+> 본 프로젝트의 API 설계 시 모든 API 요청을 단순 GetMapping/PostMapping 일원화가 아닌, 요청 목적 및 특징 등에 따라 PutMapping을 사용하는 API 세분화가 이루어질 수 있도록 구성
+- 멱등성 유지 구분(Post : 생성/멱등성 보장 못함, Put : 수정/멱등성 보장 가능)
+- URL 등 요청자원 설계 시 Post : 컬렉션(객체 자체), Put : 특정 자원(id)

@@ -23,6 +23,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
+    /*
+    * RequiredArgsConstructor
+    * - 단순 필드 주입이 아닌 생성자 주입을 통해 안정적으로 의존성을 주입한다.
+    * - 생성자 주입을 통한 의존성 주입으로 의존성 주입 순환 오류로 인한 의존성 역전 현상을 방지한다.
+    * */
     private final Snowflake snowflake = new Snowflake();
     private final ArticleRepository articleRepository;
     private final OutboxEventPublisher outboxEventPublisher;
@@ -30,6 +35,10 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponse create(ArticleCreateRequest request) {
+        /*
+        * DATA NULL -> INSERT
+        * DATA NOT NULL -> UPDATE
+        * */
         Article article = articleRepository.save(
                 Article.create(snowflake.nextId(), request.getTitle(), request.getContent(), request.getBoardId(), request.getWriterId())
         );
