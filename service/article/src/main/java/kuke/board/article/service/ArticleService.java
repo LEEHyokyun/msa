@@ -71,6 +71,10 @@ public class ArticleService {
     public ArticleResponse update(Long articleId, ArticleUpdateRequest request) {
         Article article = articleRepository.findById(articleId).orElseThrow();
         article.update(request.getTitle(), request.getContent());
+        /*
+        * 트랜잭션이 끝나는 시점에서 영속성 객체인 article(Repository를 통해 객체를 호출하였으므로)의 변화 감지(Dirty Checking)
+        * SnapShot의 변화 감지 후 DB에 최종적으로 반영
+        * */
         outboxEventPublisher.publish(
                 EventType.ARTICLE_UPDATED,
                 ArticleUpdatedEventPayload.builder()

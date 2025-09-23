@@ -11,6 +11,10 @@ import org.springframework.web.client.RestClient;
 import java.util.List;
 
 public class ArticleApiTest {
+    /*
+    * Spring Boot 3.0 ver 이상부터 사용할 수 있는
+    * Test용 HTTP Reqeust Template
+    * */
     RestClient restClient = RestClient.create("http://localhost:9000");
 
     @Test
@@ -21,6 +25,9 @@ public class ArticleApiTest {
         System.out.println("response = " + response);
     }
 
+    /*
+    * create process 별도 정의
+    * */
     ArticleResponse create(ArticleCreateRequest request) {
         return restClient.post()
                 .uri("/v1/articles")
@@ -31,7 +38,7 @@ public class ArticleApiTest {
 
     @Test
     void readTest() {
-        ArticleResponse response = read(121530268440289280L);
+        ArticleResponse response = read(228802790527574016L);
         System.out.println("response = " + response);
     }
 
@@ -44,8 +51,8 @@ public class ArticleApiTest {
 
     @Test
     void updateTest() {
-        update(121530268440289280L);
-        ArticleResponse response = read(121530268440289280L);
+        update(228802790527574016L);
+        ArticleResponse response = read(228802790527574016L);
         System.out.println("response = " + response);
     }
 
@@ -59,7 +66,7 @@ public class ArticleApiTest {
     @Test
     void deleteTest() {
         restClient.delete()
-                .uri("/v1/articles/{articleId}", 121530268440289280L)
+                .uri("/v1/articles/{articleId}", 228802790527574016L)
                 .retrieve();
     }
 
@@ -123,7 +130,9 @@ public class ArticleApiTest {
         System.out.println("count2 = " + count2); // 0
     }
 
-
+    /*
+    * Test를 위한 Test용 Request 객체 별도 정의
+    * */
     @Getter
     @AllArgsConstructor
     static class ArticleCreateRequest {
