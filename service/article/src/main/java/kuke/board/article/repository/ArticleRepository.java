@@ -12,6 +12,11 @@ import java.util.List;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
+    /*
+    * Paging Natvie Query(현재 페이지에서 데이터 불러오기)
+    * - Covering Index와
+    * - limit(한번에 표시할 데이터 개수) / offset(현재 페이지)
+    * */
     @Query(
             value = "select article.article_id, article.title, article.content, article.board_id, article.writer_id, " +
                     "article.created_at, article.modified_at " +
@@ -29,6 +34,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
             @Param("limit") Long limit
     );
 
+    /*
+     * Paging Natvie Query(현재 페이지에서 필요한 총 데이터 개수 추출하기)
+     * - Covering Index와
+     * - limit(표시할 전체 데이터 개수)
+     * */
     @Query(
             value = "select count(*) from (" +
                     "   select article_id from article where board_id = :boardId limit :limit" +

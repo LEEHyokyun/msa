@@ -12,11 +12,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
+/*
+* SpringBootTest = 통합테스트.
+* - 통합테스트로 진행할 경우 Boot 전체 환경 초기화가 필요하므로 시간이 좀 소요됨.
+* */
 class ArticleRepositoryTest {
+
+    /*
+    *  개별적인 테스트 환경이므로 의존성 주입은 autowired로 하여도 무방
+    * */
     @Autowired
     ArticleRepository articleRepository;
 
     @Test
+    /*
+    * 특정 페이지에서 데이터를 추출하는 페이징 쿼리
+    * */
     void findAllTest() {
         List<Article> articles = articleRepository.findAll(1L, 1499970L, 30L);
         log.info("articles.size = {}", articles.size());
@@ -26,6 +37,9 @@ class ArticleRepositoryTest {
     }
 
     @Test
+    /*
+     * 특정 페이지에서 필요한 전체 데이터 개수를 추출하는 쿼리
+     * */
     void countTest() {
         Long count = articleRepository.count(1L, 10000L);
         log.info("count = {}", count);

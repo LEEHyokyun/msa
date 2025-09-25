@@ -73,7 +73,13 @@ public class ArticleApiTest {
     @Test
     void readAllTest() {
         ArticlePageResponse response = restClient.get()
-                .uri("/v1/articles?boardId=1&pageSize=30&page=50000")
+                /*
+                * 1번 페이지에서
+                * 30개의
+                * 게시판 1번의 게시글들을
+                * 조회해온다.
+                * */
+                .uri("/v1/articles?boardId=1&pageSize=30&page=1")
                 .retrieve()
                 .body(ArticlePageResponse.class);
 
