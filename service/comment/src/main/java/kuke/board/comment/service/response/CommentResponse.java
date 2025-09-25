@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @ToString
+/*
+ * 댓글 API에 대한 응답DTO
+ * */
 public class CommentResponse {
     private Long commentId;
     private String content;

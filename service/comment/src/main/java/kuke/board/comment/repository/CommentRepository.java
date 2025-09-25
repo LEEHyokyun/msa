@@ -8,8 +8,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/*
+* 댓글 기능 구축을 위한 JPA Repository 생성
+* */
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+    /*
+    * 특정 게시판에서 댓글/대댓글 데이터 카운트 읽기
+    * (해당 댓글의 자식댓글 여부를 조회하기 위함)
+    * */
     @Query(
             value = "select count(*) from (" +
                     "   select comment_id from comment " +
