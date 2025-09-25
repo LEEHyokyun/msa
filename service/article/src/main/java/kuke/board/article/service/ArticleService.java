@@ -128,6 +128,10 @@ public class ArticleService {
         );
     }
 
+    /*
+    * 무한스크롤 동작은 전체 데이터 개수 등 페이징 쿼리에서 필요한 다른 데이터가 필요없어진다.
+    * 이에 따라 PagingDTO가 아닌 일반 ArticleDTO를 사용
+    * */
     public List<ArticleResponse> readAllInfiniteScroll(Long boardId, Long pageSize, Long lastArticleId) {
         List<Article> articles = lastArticleId == null ?
                 articleRepository.findAllInfiniteScroll(boardId, pageSize) :

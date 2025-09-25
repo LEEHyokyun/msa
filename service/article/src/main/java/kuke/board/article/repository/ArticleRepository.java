@@ -47,6 +47,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     )
     Long count(@Param("boardId") Long boardId, @Param("limit") Long limit);
 
+    /*
+     * Infinite Natvie Query
+     * 최초 무한스크롤 동작
+     * (최초의 데이터를 추출하기 위한 동작)
+     * */
     @Query(
             value = "select article.article_id, article.title, article.content, article.board_id, article.writer_id, " +
                     "article.created_at, article.modified_at " +
@@ -57,6 +62,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     )
     List<Article> findAllInfiniteScroll(@Param("boardId") Long boardId, @Param("limit") Long limit);
 
+    /*
+     * Infinite Natvie Query
+     * 최초동작 이후 기준점을 알고있는 상태에서 무한스크롤 동작
+     * (기준점을 매개변수로 받아 이후의 무한스크롤 데이터를 추출하기 위한 동작)
+     * */
     @Query(
             value = "select article.article_id, article.title, article.content, article.board_id, article.writer_id, " +
                     "article.created_at, article.modified_at " +

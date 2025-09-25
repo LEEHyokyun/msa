@@ -97,6 +97,10 @@ public class ArticleApiTest {
                 .body(new ParameterizedTypeReference<List<ArticleResponse>>() {
                 });
 
+        /*
+         * 무한 스크롤 첫번째 데이터를 조회해온다.
+         * 한번에 추출하는 데이터의 개수는 5개이다.
+         * */
         System.out.println("firstPage");
         for (ArticleResponse articleResponse : articles1) {
             System.out.println("articleResponse.getArticleId() = " + articleResponse.getArticleId());
@@ -109,6 +113,10 @@ public class ArticleApiTest {
                 .body(new ParameterizedTypeReference<List<ArticleResponse>>() {
                 });
 
+        /*
+         * 무한 스크롤 최초 동작 이후의 차후 데이터를 조회해온다.
+         * 한번에 추출하는 데이터의 개수는 5개이다.
+         * */
         System.out.println("secondPage");
         for (ArticleResponse articleResponse : articles2) {
             System.out.println("articleResponse.getArticleId() = " + articleResponse.getArticleId());

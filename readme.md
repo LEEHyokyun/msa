@@ -53,4 +53,13 @@
   - [TOBE] Secondary Index / Clustered Index를 활용 및 적절한 전략 수립을 통해 유의미한 조회성능향상
   - [Paging Query & Index 정리](https://velog.io/@gyrbs22/%EB%B0%B1%EC%97%94%EB%93%9C-%EC%9D%B8%EB%8D%B1%EC%8A%A4%EB%A5%BC-%EB%AA%85%ED%99%95%ED%9E%88-%ED%8C%8C%EC%95%85%ED%95%98%EA%B8%B0-%EC%A1%B0%ED%9A%8C%EC%84%B1%EB%8A%A5%ED%96%A5%EC%83%81%EC%9D%B4-%EC%96%B4%EB%8A%90-%EB%B6%80%EB%B6%84%EC%97%90%EC%84%9C-%EC%9D%B4%EB%A3%A8%EC%96%B4%EC%A7%80%EB%8A%94%EA%B0%80%EB%8B%A8%EC%88%9C-%EC%9D%B8%EB%8D%B1%EC%8A%A4-%ED%99%9C%EC%9A%A9%EB%B6%80%ED%84%B0-Covering-Index-%EB%93%B1%EC%9D%98-%EC%A0%84%EB%9E%B5%EA%B9%8C%EC%A7%80)
   - 페이징 쿼리를 사용할 경우 Boot에서 제공하는 Pagable보다 JPA의 natvie query로 직접 작정하는 것이 효과적
+
 [case 2) Infinite Scroll]
+
+- 별도 offset 구성없이 이전에 조회한 마지막 페이지 혹은 기준점을 기억하여 다음 스크롤 시 데이터를 추출하도록 한다.
+- 다음 스크롤에 나타날 데이터의 기준 혹은 추출 조건을 기억하고 Clustered Index에서 바로 데이터를 추출한다.
+
+- Index를 활용하여 데이터 추출 및 페이징 성능 향상
+  - [ASIS] offset을 찾기 위한 scan 작업과 Clustered/Secondary Index 작업을 통해 불필요한 조회비용이 발생하고, 복잡한 페이징 쿼리 작업이 필요하다.
+  - [TOBE] 명확한 기준점을 매개변수로 전달하며 Clustered Index를 활용 등을 통해 조회성능향상하고 offset 관계없이 균등한 조회성능을 확보
+  - 최초 무한스크롤 조회 쿼리와 이후(기준점 기억 이후) 조회 쿼리를 다르게 구성한다.

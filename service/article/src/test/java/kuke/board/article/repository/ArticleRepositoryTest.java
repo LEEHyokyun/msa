@@ -46,6 +46,10 @@ class ArticleRepositoryTest {
     }
 
     @Test
+        /*
+         * 무한스크롤 최초 및 그 이후에 동작하여
+         * 데이터를 추출하는 쿼리
+         * */
     void findInfiniteScrollTest() {
         List<Article> articles = articleRepository.findAllInfiniteScroll(1L, 30L);
         for (Article article : articles) {
