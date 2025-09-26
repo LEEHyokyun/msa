@@ -120,6 +120,9 @@ public class CommentService {
         }
     }
 
+    /*
+    * 페이징
+    * */
     public CommentPageResponse readAll(Long articleId, Long page, Long pageSize) {
         return CommentPageResponse.of(
                 commentRepository.findAll(articleId, (page - 1) * pageSize, pageSize).stream()
@@ -129,6 +132,9 @@ public class CommentService {
         );
     }
 
+    /*
+    * 무한스크롤
+    * */
     public List<CommentResponse> readAll(Long articleId, Long lastParentCommentId, Long lastCommentId, Long limit) {
         List<Comment> comments = lastParentCommentId == null || lastCommentId == null ?
                 commentRepository.findAllInfiniteScroll(articleId, limit) :

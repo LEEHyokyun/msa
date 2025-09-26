@@ -63,30 +63,32 @@ public class CommentApiTest {
     @Test
     void readAll() {
         CommentPageResponse response = restClient.get()
-                .uri("/v1/comments?articleId=1&page=1&pageSize=10")
+                .uri("/v1/comments?articleId=1&page=300000&pageSize=10")
                 .retrieve()
                 .body(CommentPageResponse.class);
 
         System.out.println("response.getCommentCount() = " + response.getCommentCount());
         for (CommentResponse comment : response.getComments()) {
             if (!comment.getCommentId().equals(comment.getParentCommentId())) {
+                /*1depth 댓글*/
                 System.out.print("\t");
             }
+            /*2depth 댓글*/
             System.out.println("comment.getCommentId() = " + comment.getCommentId());
         }
 
         /**
          * 1번 페이지 수행 결과
-         * comment.getCommentId() = 123693535103893504
-         * 	comment.getCommentId() = 123693535468797952
-         * 	comment.getCommentId() = 123693535527518208
-         * comment.getCommentId() = 123696314740150272
-         * 	comment.getCommentId() = 123696314773704717
-         * comment.getCommentId() = 123696314740150273
-         * 	comment.getCommentId() = 123696314777899028
-         * comment.getCommentId() = 123696314740150274
-         * 	comment.getCommentId() = 123696314773704705
-         * comment.getCommentId() = 123696314740150275
+         * comment.getCommentId() = 229796041077035008
+         * 	comment.getCommentId() = 229796041261584386
+         * comment.getCommentId() = 229796041077035009
+         * 	comment.getCommentId() = 229796041265778698
+         * comment.getCommentId() = 229796041077035010
+         * 	comment.getCommentId() = 229796041265778707
+         * comment.getCommentId() = 229796041077035011
+         * 	comment.getCommentId() = 229796041265778697
+         * comment.getCommentId() = 229796041077035012
+         * 	comment.getCommentId() = 229796041261584387
          */
     }
 

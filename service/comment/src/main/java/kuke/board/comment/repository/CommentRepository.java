@@ -31,6 +31,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             @Param("limit") Long limit
     );
 
+    /*
+    * Covering Index를 활용하여
+    * 댓글목록을 부모 댓글 / 자식 댓글 순으로 정렬 조회
+    * */
     @Query(
             value = "select comment.comment_id, comment.content, comment.parent_comment_id, comment.article_id, " +
                     "comment.writer_id, comment.deleted, comment.created_at " +
@@ -47,6 +51,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             @Param("limit") Long limit
     );
 
+    /*
+    * Covering Index를 활용하여
+    * 조회 성능을 향상할 수 있는 방향으로 전체 댓글 수를 산출
+    * */
     @Query(
             value = "select count(*) from (" +
                     "   select comment_id from comment where article_id = :articleId limit :limit" +
@@ -58,6 +66,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             @Param("limit") Long limit
     );
 
+    /*
+    * 기준점이 없는 최초 무한스크롤
+    * */
     @Query(
             value = "select comment.comment_id, comment.content, comment.parent_comment_id, comment.article_id, " +
                     "comment.writer_id, comment.deleted, comment.created_at " +
@@ -72,6 +83,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             @Param("limit") Long limit
     );
 
+    /*
+    * 최초 무한스크롤 이후의 조회 쿼리
+    * */
     @Query(
             value = "select comment.comment_id, comment.content, comment.parent_comment_id, comment.article_id, " +
                     "comment.writer_id, comment.deleted, comment.created_at " +

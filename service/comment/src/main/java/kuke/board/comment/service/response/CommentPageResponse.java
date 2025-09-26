@@ -8,7 +8,9 @@ import java.util.List;
 public class CommentPageResponse {
     private List<CommentResponse> comments;
     private Long commentCount;
-
+    /*
+    * 페이징 전용 Response
+    * */
     public static CommentPageResponse of(List<CommentResponse> comments, Long commentCount) {
         CommentPageResponse response = new CommentPageResponse();
         response.comments = comments;

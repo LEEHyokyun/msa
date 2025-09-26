@@ -26,11 +26,17 @@ public class CommentController {
         return commentService.create(request);
     }
 
+    /*
+    * PathVariables -> URI에 해당 식별자 명시됨
+    * */
     @DeleteMapping("/v1/comments/{commentId}")
     public void delete(@PathVariable("commentId") Long commentId) {
         commentService.delete(commentId);
     }
 
+    /*
+     * RequestParam -> URI에 해당 식별자 명시하지 않음
+     * */
     @GetMapping("/v1/comments")
     public CommentPageResponse readAll(
             @RequestParam("articleId") Long articleId,
