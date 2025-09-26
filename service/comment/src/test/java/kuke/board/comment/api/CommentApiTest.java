@@ -15,6 +15,9 @@ public class CommentApiTest {
 
     @Test
     void create() {
+        /*
+        * 부모댓글 및 하위 2개의 댓글 생성
+        * */
         CommentResponse response1 = createComment(new CommentCreateRequest(1L, "my comment1", null, 1L));
         CommentResponse response2 = createComment(new CommentCreateRequest(1L, "my comment2", response1.getCommentId(), 1L));
         CommentResponse response3 = createComment(new CommentCreateRequest(1L, "my comment3", response1.getCommentId(), 1L));
@@ -23,9 +26,9 @@ public class CommentApiTest {
         System.out.println("\tcommentId=%s".formatted(response2.getCommentId()));
         System.out.println("\tcommentId=%s".formatted(response3.getCommentId()));
 
-//        commentId=123694721668214784
-//          commentId=123694721986981888
-//          commentId=123694722045702144
+//        commentId=229790209535275008
+//          commentId=229790212127354880
+//          commentId=229790212320292864
     }
 
     CommentResponse createComment(CommentCreateRequest request) {
@@ -39,7 +42,7 @@ public class CommentApiTest {
     @Test
     void read() {
         CommentResponse response = restClient.get()
-                .uri("/v1/comments/{commentId}", 123694721668214784L)
+                .uri("/v1/comments/{commentId}", 229790209535275008L)
                 .retrieve()
                 .body(CommentResponse.class);
 
@@ -48,12 +51,12 @@ public class CommentApiTest {
 
     @Test
     void delete() {
-        //        commentId=123694721668214784 - x
-        //          commentId=123694721986981888 - x
-        //          commentId=123694722045702144 - x
+        //        commentId=229790209535275008 - x
+        //          commentId=229790212127354880 - x
+        //          commentId=229790212320292864 - x
 
         restClient.delete()
-                .uri("/v1/comments/{commentId}", 123694722045702144L)
+                .uri("/v1/comments/{commentId}", 229790212320292864L)
                 .retrieve();
     }
 
@@ -122,6 +125,14 @@ public class CommentApiTest {
         }
     }
 
+    /*
+    * 운영 src에 존재하는 요청 DTO를 굳이 테스트 환경에서 다시 만드는 이유
+    * - 기본적으로 데이터 전달이 목적인 DTO는 테스트 대상이 아니므로 mock()할 필요가 없고 그럴 대상도 아니다.
+    * - 테스트 코드에서도 실제 DTO를 그대로 생성해서 사용하는 것이 변경점 관리나 유지관리 측면에서 유리
+    * - 단, 반복 생성을 줄이고 싶다면 테스트용 팩토리/Fixture 유틸을 두는 것을 권장(DTO "생성"이 빈번하게 일어날 경우)
+    * - Nested Class로 생성 가능하며 정적 중첩 클래스로 선언된 예시, 다만 운영에 해당 DTO를 생성하기 전에 테스트에서 먼저 만들었을 가능성
+    * (굳이 생성할 필요는 없었으나 시간 차로 인해 존재할 경우)
+    * */
     @Getter
     @AllArgsConstructor
     public static class CommentCreateRequest {

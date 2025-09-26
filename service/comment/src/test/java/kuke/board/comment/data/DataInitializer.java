@@ -41,6 +41,10 @@ public class DataInitializer {
     }
 
     void insert() {
+        /*
+        * 짝수 > 자식 댓글 없음, 자기 자신이 부모 댓글
+        * 홀수 > 이전의 코멘트를 부모 댓글로 구성
+        * */
         transactionTemplate.executeWithoutResult(status -> {
             Comment prev = null;
             for(int i = 0; i < BULK_INSERT_SIZE; i++) {
