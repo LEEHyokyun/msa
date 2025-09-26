@@ -8,9 +8,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,8 +47,22 @@ public class MessageRelayConfig {
         return executor;
     }
 
+//    @Bean
+//    public Executor messageRelayPublishPendingEventExecutor() {
+//        return Executors.newSingleThreadScheduledExecutor();
+//    }
+
+    /*
+    * [2025/09/26]
+    * Spring 최신 버전에서는 Scheduler를 Executor가 아닌 TaskScheduler로 반환해주어야 한다.
+    * 향후 추가 학습 필요함
+    * */
     @Bean
-    public Executor messageRelayPublishPendingEventExecutor() {
-        return Executors.newSingleThreadScheduledExecutor();
+    public TaskScheduler messageRelayPublishPendingEventExecutor() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(1);
+        scheduler.setThreadNamePrefix("task-scheduler-");
+        scheduler.initialize();
+        return scheduler;
     }
 }
