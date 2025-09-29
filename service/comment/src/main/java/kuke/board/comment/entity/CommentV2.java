@@ -22,6 +22,13 @@ public class CommentV2 {
     private String content;
     private Long articleId; // shard key
     private Long writerId;
+
+    /*
+    * parent Id 불필요
+    * 그대신 comment Path 정보만 필요
+    * 내부적으로 기본 자료형이 아닌 값을 표현하는 객체 (참조형) Value Object가 필요할 경우 사용하는 어노테이션
+    * -> Embedded 어노테이션 사용
+    * */
     @Embedded
     private CommentPath commentPath;
     private Boolean deleted;

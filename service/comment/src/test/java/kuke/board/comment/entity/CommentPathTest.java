@@ -8,7 +8,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CommentPathTest {
     @Test
     void createChildCommentTest() {
-        // 00000 <- 생성
+        /*
+        * param이 좀 헷갈리게 되어있는데.. 내가 생성하고 싶은 댓글의 depth를 기준으로.
+        * param = "현황"임.
+        * param 1 - 부모댓글의 depth(*부모댓글의 depth가 root이면 빈 문자열로 표기)
+        * param 2 - 자식댓글의 depth
+        * */
+        // 00000 <- 생성(최초 생성)
         createChildCommentTest(CommentPath.create(""), null, "00000");
 
         // 00000
@@ -32,6 +38,9 @@ class CommentPathTest {
         assertThat(childCommentPath.getPath()).isEqualTo(expectedChildPath);
     }
 
+    /*
+    * max depth
+    * */
     @Test
     void createChildCommentPathIfMaxDepthTest() {
         assertThatThrownBy(() ->
@@ -39,6 +48,9 @@ class CommentPathTest {
         ).isInstanceOf(IllegalStateException.class);
     }
 
+    /*
+    * max chunk
+    * */
     @Test
     void createChildCommentPathIfChunkOverflowTest() {
         // given
