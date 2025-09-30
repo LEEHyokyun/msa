@@ -22,10 +22,36 @@ public class ArticleLikeService {
     private final ArticleLikeRepository articleLikeRepository;
     private final ArticleLikeCountRepository articleLikeCountRepository;
 
+    /*
+    * 해당 게시글에 사용자가 좋아요를 눌렀는지 여부에 대한 조회
+    * */
     public ArticleLikeResponse read(Long articleId, Long userId) {
         return articleLikeRepository.findByArticleIdAndUserId(articleId, userId)
                 .map(ArticleLikeResponse::from)
                 .orElseThrow();
+    }
+
+    /*
+    * 좋아요 눌렀을때
+    * */
+    @Transactional
+    public void like(Long articleId, Long userId){
+        articleLikeRepository.save(
+                ArticleLike.create(
+                        snowflake.nextId(),
+                        articleId,
+                        userId
+                )
+        );
+    }
+
+    /*
+    * 좋아요 취소
+    * */
+    @Transactional
+    public void unlike(Long articleId, Long userId){
+        articleLikeRepository.findByArticleIdAndUserId(articleId, userId)
+                .ifPresent(articleLikeRepository::delete);
     }
 
     /**

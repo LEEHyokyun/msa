@@ -8,8 +8,32 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+* API TEST
+* */
 public class LikeApiTest {
     RestClient restClient = RestClient.create("http://localhost:9002");
+
+    @Test
+    void likeAndUnlikeFunctionInitTest() {
+        Long articleId = 9999L;
+
+        likeInit(articleId, 1L);
+        likeInit(articleId, 2L);
+        likeInit(articleId, 3L);
+
+
+        ArticleLikeResponse response1 = read(articleId, 1L);
+        ArticleLikeResponse response2 = read(articleId, 2L);
+        ArticleLikeResponse response3 = read(articleId, 3L);
+        System.out.println("response1 = " + response1);
+        System.out.println("response2 = " + response2);
+        System.out.println("response3 = " + response3);
+
+        unlikeInit(articleId, 1L);
+        unlikeInit(articleId, 2L);
+        unlikeInit(articleId, 3L);
+    }
 
     @Test
     void likeAndUnlikeTest() {
@@ -29,6 +53,24 @@ public class LikeApiTest {
         unlike(articleId, 1L);
         unlike(articleId, 2L);
         unlike(articleId, 3L);
+    }
+
+    /*
+    * uri 조심 - 실제 uri와 정확히 일치해야함
+    * */
+    void likeInit(Long articleId, Long userId) {
+        restClient.post()
+                .uri("/v1/article-likes/articles/{articleId}/users/{userId}", articleId, userId)
+                .retrieve();
+    }
+
+    /*
+     * uri 조심 - 실제 uri와 정확히 일치해야함
+     * */
+    void unlikeInit(Long articleId, Long userId) {
+        restClient.delete()
+                .uri("/v1/article-likes/articles/{articleId}/users/{userId}", articleId, userId)
+                .retrieve();
     }
 
     void like(Long articleId, Long userId, String lockType) {

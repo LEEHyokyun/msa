@@ -22,6 +22,9 @@ public class ArticleLike {
     private Long userId;
     private LocalDateTime createdAt;
 
+    /*
+    * 정책적/기능적 create = Entity 책임
+    * */
     public static ArticleLike create(Long articleLikeId, Long articleId, Long userId) {
         ArticleLike articleLike = new ArticleLike();
         articleLike.articleLikeId = articleLikeId;
