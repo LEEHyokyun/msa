@@ -29,8 +29,16 @@ public class CommentServiceV2 {
     private final OutboxEventPublisher outboxEventPublisher;
     private final ArticleCommentCountRepository articleCommentCountRepository;
 
+    /*
+    * 경로열거에 의한 댓글 생성
+    * */
     @Transactional
     public CommentResponse create(CommentCreateRequestV2 request) {
+        /*
+        * 기본적으로 상위 댓글을 찾고
+        * 상위댓글이 없다면 빈 문자열, 상위댓글이 있다면 그대로 추출하여
+        * 댓글정보를 생성한다.
+        * */
         CommentV2 parent = findParent(request);
         CommentPath parentCommentPath = parent == null ? CommentPath.create("") : parent.getCommentPath();
         CommentV2 comment = commentRepository.save(
@@ -75,17 +83,29 @@ public class CommentServiceV2 {
         if (parentPath == null) {
             return null;
         }
+
+        /*
+        * 부모댓글의 정보 그대로 추출(*삭제되지 않은 댓글)
+        * */
         return commentRepository.findByPath(parentPath)
                 .filter(not(CommentV2::getDeleted))
                 .orElseThrow();
     }
 
+    /*
+    * 댓글내용 불러오기
+    * */
     public CommentResponse read(Long commentId) {
         return CommentResponse.from(
                 commentRepository.findById(commentId).orElseThrow()
         );
     }
 
+    /*
+    * 댓글 삭제하기
+    * - 댓글을 찾아서 삭제가 되지 않은 것을 확인
+    * - 자식이 있을 경우 삭제표시, 없을 경우 hard delete
+    * */
     @Transactional
     public void delete(Long commentId) {
         commentRepository.findById(commentId)
@@ -113,6 +133,10 @@ public class CommentServiceV2 {
                 });
     }
 
+    /*
+    * 자식댓글유무 확인 = descendants top path 댓글 조회\
+    * Optional isPresent()
+    * */
     private boolean hasChildren(CommentV2 comment) {
         return commentRepository.findDescendantsTopPath(
                 comment.getArticleId(),
@@ -120,6 +144,9 @@ public class CommentServiceV2 {
         ).isPresent();
     }
 
+    /*
+    * 삭제, root 댓글이 아니라면 상위 댓글을 찾아서 재귀적 삭제
+    * */
     private void delete(CommentV2 comment) {
         commentRepository.delete(comment);
         articleCommentCountRepository.decrease(comment.getArticleId());

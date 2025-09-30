@@ -40,6 +40,7 @@ class CommentPathTest {
 
     /*
     * max depth
+    * = isDepthOverflowed
     * */
     @Test
     void createChildCommentPathIfMaxDepthTest() {
@@ -50,6 +51,7 @@ class CommentPathTest {
 
     /*
     * max chunk
+    * -> isChunkOverflowed
     * */
     @Test
     void createChildCommentPathIfChunkOverflowTest() {

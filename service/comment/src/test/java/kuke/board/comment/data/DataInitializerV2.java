@@ -63,6 +63,9 @@ public class DataInitializerV2 {
 
     private static final int DEPTH_CHUNK_SIZE = 5;
 
+    /*
+    * 마찬가지로 문자열과 10진수 변환을 통해 path 정보 반환
+    * */
     CommentPath toPath(int value) {
         String path = "";
         for (int i=0; i < DEPTH_CHUNK_SIZE; i++) {

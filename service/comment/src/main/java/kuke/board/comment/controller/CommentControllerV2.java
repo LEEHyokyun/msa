@@ -16,6 +16,9 @@ import java.util.List;
 public class CommentControllerV2 {
     private final CommentServiceV2 commentService;
 
+    /*
+    * 댓글 읽기
+    * */
     @GetMapping("/v2/comments/{commentId}")
     public CommentResponse read(
             @PathVariable("commentId") Long commentId
@@ -23,11 +26,17 @@ public class CommentControllerV2 {
         return commentService.read(commentId);
     }
 
+    /*
+    * 댓글생성
+    * */
     @PostMapping("/v2/comments")
     public CommentResponse create(@RequestBody CommentCreateRequestV2 request) {
         return commentService.create(request);
     }
 
+    /*
+    * 댓글삭제
+    * */
     @DeleteMapping("/v2/comments/{commentId}")
     public void delete(@PathVariable("commentId") Long commentId) {
         commentService.delete(commentId);

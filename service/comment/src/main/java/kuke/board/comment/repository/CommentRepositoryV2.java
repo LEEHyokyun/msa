@@ -11,9 +11,17 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
+
+    /*
+    * unique path 정보를 통해 댓글 정보 추출
+    * */
     @Query("select c from CommentV2 c where c.commentPath.path = :path")
     Optional<CommentV2> findByPath(@Param("path") String path);
 
+    /*
+    * 댓글 생성 시 path 추출을 위한 최근자식댓글 추출
+    * path > pathPrefix (*본인댓글 제외)
+    * */
     @Query(
             value = "select path from comment_v2 " +
                     "where article_id = :articleId and path > :pathPrefix and path like :pathPrefix% " +
