@@ -158,6 +158,9 @@ public class CommentServiceV2 {
         }
     }
 
+    /*
+    * 페이징 쿼리
+    * */
     public CommentPageResponse readAll(Long articleId, Long page, Long pageSize) {
         return CommentPageResponse.of(
                 commentRepository.findAll(articleId, (page - 1) * pageSize, pageSize).stream()
@@ -167,6 +170,9 @@ public class CommentServiceV2 {
         );
     }
 
+    /*
+    * 무한 스크롤
+    * */
     public List<CommentResponse> readAllInfiniteScroll(Long articleId, String lastPath, Long pageSize) {
         List<CommentV2> comments = lastPath == null ?
                 commentRepository.findAllInfiniteScroll(articleId, pageSize) :
@@ -177,6 +183,9 @@ public class CommentServiceV2 {
                 .toList();
     }
 
+    /*
+    * 전체 댓글 수 없으면 0을 반환
+    * */
     public Long count(Long articleId) {
         return articleCommentCountRepository.findById(articleId)
                 .map(ArticleCommentCount::getCommentCount)

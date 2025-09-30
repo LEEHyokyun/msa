@@ -33,6 +33,9 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
             @Param("pathPrefix") String pathPrefix
     );
 
+    /*
+    * 게시판 댓글 모두 조회
+    * */
     @Query(
             value = "select comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
                     "comment_v2.writer_id, comment_v2.deleted, comment_v2.created_at " +
@@ -49,6 +52,10 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
             @Param("limit") Long limit
     );
 
+    /*
+    * 댓글 목록 조회
+    * - 페이징
+    * */
     @Query(
             value = "select count(*) from (" +
                     "   select comment_id from comment_v2 where article_id = :articleId limit :limit " +
@@ -60,6 +67,10 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
             @Param("limit") Long limit
     );
 
+    /*
+    * 댓글 목록 조회
+    * - 무한스크롤(첫페이지)
+    * */
     @Query(
             value = "select comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
                     "comment_v2.writer_id, comment_v2.deleted, comment_v2.created_at " +
@@ -74,7 +85,10 @@ public interface CommentRepositoryV2 extends JpaRepository<CommentV2, Long> {
             @Param("limit") Long limit
     );
 
-
+    /*
+     * 댓글 목록 조회
+     * - 무한스크롤(첫페이지 이후)
+     * */
     @Query(
             value = "select comment_v2.comment_id, comment_v2.content, comment_v2.path, comment_v2.article_id, " +
                     "comment_v2.writer_id, comment_v2.deleted, comment_v2.created_at " +
