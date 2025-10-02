@@ -54,6 +54,10 @@ public class CommentServiceV2 {
                 )
         );
 
+        /*
+        * 댓글 생성시점에 댓글 수 증가
+        * 최초 생성 시 데이터 없으면 1로 초기화(save 명기)
+        * */
         int result = articleCommentCountRepository.increase(request.getArticleId());
         if (result == 0) {
             articleCommentCountRepository.save(
@@ -112,8 +116,14 @@ public class CommentServiceV2 {
                 .filter(not(CommentV2::getDeleted))
                 .ifPresent(comment -> {
                     if(hasChildren(comment)) {
+                        /*
+                        * 삭제표시(soft delete) 시 댓글 수 감소처리 하지 않는다.
+                        * */
                         comment.delete();
                     } else {
+                        /*
+                        * 물리적 삭제 시에만 감소 처리한다.
+                        * */
                         delete(comment);
                     }
 
@@ -149,6 +159,9 @@ public class CommentServiceV2 {
     * */
     private void delete(CommentV2 comment) {
         commentRepository.delete(comment);
+        /*
+         * 댓글 물리적 삭제시점에 댓글 수 감소
+         * */
         articleCommentCountRepository.decrease(comment.getArticleId());
         if (!comment.isRoot()) {
             commentRepository.findByPath(comment.getCommentPath().getParentPath())
@@ -167,6 +180,10 @@ public class CommentServiceV2 {
                         .map(CommentResponse::from)
                         .toList(),
                 commentRepository.count(articleId, PageLimitCalculator.calculatePageLimit(page, pageSize, 10L))
+                /*
+                * 필요시 count 바로 호출 가능
+                * */
+                //count(articleId);
         );
     }
 

@@ -115,6 +115,9 @@ public class CommentApiV2Test {
         }
     }
 
+    /*
+    * 댓글 수 생성 테스트
+    * */
     @Test
     void countTest() {
         CommentResponse commentResponse = create(new CommentCreateRequestV2(2L, "my comment1", null, 1L));

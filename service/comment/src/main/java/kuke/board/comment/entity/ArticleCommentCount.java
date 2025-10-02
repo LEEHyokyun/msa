@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/*
+* 마찬가지로 댓글 수도 별도 비정규화하여 관리
+* */
 @Table(name = "article_comment_count")
 @Entity
 @Getter

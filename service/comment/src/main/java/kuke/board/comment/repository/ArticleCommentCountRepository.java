@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/*
+* 마찬가지로 비정규화 및 비정규화를 통해 댓글 수 관리
+* */
 @Repository
 public interface ArticleCommentCountRepository extends JpaRepository<ArticleCommentCount, Long> {
     @Query(
