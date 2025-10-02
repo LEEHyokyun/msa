@@ -92,7 +92,9 @@ public class LikeApiTest {
                 .body(ArticleLikeResponse.class);
     }
 
-
+    /*
+    * 동시성 테스트 - Thread 100 pools
+    * */
     @Test
     void likePerformanceTest() throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(100);
@@ -117,6 +119,7 @@ public class LikeApiTest {
             });
         }
 
+        //latch가 끝날때까지 대기
         latch.await();
 
         long end = System.nanoTime();

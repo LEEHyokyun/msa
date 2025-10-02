@@ -55,7 +55,8 @@ public class ArticleLikeService {
     }
 
     /**
-     * update 구문
+     * 비관락1
+     * update 구문 (*최초 요청 시에 대한 분기처리 필수)
      */
     @Transactional
     public void likePessimisticLock1(Long articleId, Long userId) {
@@ -67,6 +68,9 @@ public class ArticleLikeService {
                 )
         );
 
+        /*
+        * 최초 요청일 경우 : 데이터 하나 최초 생성(save 명기)
+        * */
         int result = articleLikeCountRepository.increase(articleId);
         if (result == 0) {
             // 최초 요청 시에는 update 되는 레코드가 없으므로, 1로 초기화한다.
@@ -93,6 +97,7 @@ public class ArticleLikeService {
     public void unlikePessimisticLock1(Long articleId, Long userId) {
         articleLikeRepository.findByArticleIdAndUserId(articleId, userId)
                 .ifPresent(articleLike -> {
+                    //delete -> row 수 반환, 0이라면 이미 삭제되어 이 로직을 진행할 필요 없음
                     articleLikeRepository.delete(articleLike);
                     articleLikeCountRepository.decrease(articleId);
                     outboxEventPublisher.publish(
@@ -110,6 +115,7 @@ public class ArticleLikeService {
     }
 
     /**
+     * 비관락2
      * select ... for update + update
      */
     @Transactional
@@ -121,6 +127,10 @@ public class ArticleLikeService {
                         userId
                 )
         );
+
+        /*
+        * 최초 생성하는 데이터가 영속하지 않을 수 있으므로 save 명기
+        * */
         ArticleLikeCount articleLikeCount = articleLikeCountRepository.findLockedByArticleId(articleId)
                 .orElseGet(() -> ArticleLikeCount.init(articleId, 0L));
         articleLikeCount.increase();
@@ -131,12 +141,16 @@ public class ArticleLikeService {
     public void unlikePessimisticLock2(Long articleId, Long userId) {
         articleLikeRepository.findByArticleIdAndUserId(articleId, userId)
                 .ifPresent(articleLike -> {
+                    //delete -> row 수 반환, 0이라면 이미 삭제되어 이 로직을 진행할 필요 없음
                     articleLikeRepository.delete(articleLike);
                     ArticleLikeCount articleLikeCount = articleLikeCountRepository.findLockedByArticleId(articleId).orElseThrow();
                     articleLikeCount.decrease();
                 });
     }
 
+    /*
+    * 낙관락(일반 조회 및 처리, 엔티티에 한해 version)
+    * */
     @Transactional
     public void likeOptimisticLock(Long articleId, Long userId) {
         articleLikeRepository.save(
@@ -147,6 +161,9 @@ public class ArticleLikeService {
                 )
         );
 
+        /*
+         * 최초 생성하는 데이터가 영속하지 않을 수 있으므로 save 명기
+         * */
         ArticleLikeCount articleLikeCount = articleLikeCountRepository.findById(articleId)
                 .orElseGet(() -> ArticleLikeCount.init(articleId, 0L));
         articleLikeCount.increase();
@@ -163,6 +180,9 @@ public class ArticleLikeService {
                 });
     }
 
+    /*
+    * 게시글의 좋아요 수 추출(없으면 0)
+    * */
     public Long count(Long articleId) {
         return articleLikeCountRepository.findById(articleId)
                 .map(ArticleLikeCount::getLikeCount)
