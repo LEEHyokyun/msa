@@ -42,6 +42,10 @@ public class ArticleService {
         Article article = articleRepository.save(
                 Article.create(snowflake.nextId(), request.getTitle(), request.getContent(), request.getBoardId(), request.getWriterId())
         );
+
+        /*
+        * 게시글 생성 시점에 게시글 수 처리, 최초 없을 경우 init(*save 명기)
+        * */
         int result = boardArticleCountRepository.increase(request.getBoardId());
         if (result == 0) {
             boardArticleCountRepository.save(
@@ -97,6 +101,9 @@ public class ArticleService {
 
     @Transactional
     public void delete(Long articleId) {
+        /*
+         * 게시글 생성 시점에 게시글 수 처리
+         * */
         Article article = articleRepository.findById(articleId).orElseThrow();
         articleRepository.delete(article);
         boardArticleCountRepository.decrease(article.getBoardId());
@@ -139,6 +146,9 @@ public class ArticleService {
         return articles.stream().map(ArticleResponse::from).toList();
     }
 
+    /*
+    * 게시글 수 반환
+    * */
     public Long count(Long boardId) {
         return boardArticleCountRepository.findById(boardId)
                 .map(BoardArticleCount::getArticleCount)

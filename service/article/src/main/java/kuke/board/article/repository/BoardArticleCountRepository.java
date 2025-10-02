@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BoardArticleCountRepository extends JpaRepository<BoardArticleCount, Long> {
+
+    /*
+    * 비관락 사용
+    * */
     @Query(
             value = "update board_article_count set article_count = article_count + 1 where board_id = :boardId",
             nativeQuery = true
