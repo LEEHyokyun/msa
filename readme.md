@@ -89,7 +89,7 @@
 - 해당 도메인의 트래픽이나 로직의 복잡도를 고려할 때 비관적 락으로도 충분히 동시성 문제 해결 가능(update 처리 시 DB row data를 그 시점에서 조회하면서 lock을 명시하는 방안)
 - 현재 프로젝트에서는 모든 락 구현 방안에 대해 살펴보도록 한다.
 
-## 9. Function #2 - "board(article)/comment count"
+## 10. Function #3 - "board(article)/comment count"
 
 > 게시글 수와 댓글 수를 조회한다.
 - 향후 인기글 선정을 위해 필요한 기능
