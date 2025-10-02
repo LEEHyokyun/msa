@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/*
+* 조회수를 백업하기 위한 Entity
+* */
 @Table(name = "article_view_count")
 @Getter
 @Entity
@@ -18,6 +21,9 @@ public class ArticleViewCount {
     private Long articleId; // shard key
     private Long viewCount;
 
+    /*
+    * 데이터 영속화 = entity 책임
+    * */
     public static ArticleViewCount init(Long articleId, Long viewCount) {
         ArticleViewCount articleViewCount = new ArticleViewCount();
         articleViewCount.articleId = articleId;

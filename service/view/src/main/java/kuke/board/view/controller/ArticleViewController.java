@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleViewController {
     private final ArticleViewService articleViewService;
 
+    /*
+    * 조회수 백업 API
+    * */
     @PostMapping("/v1/article-views/articles/{articleId}/users/{userId}")
     public Long increase(
             @PathVariable("articleId") Long articleId,
@@ -20,6 +23,9 @@ public class ArticleViewController {
         return articleViewService.increase(articleId, userId);
     }
 
+    /*
+    * Redis에서 실시간 조회수를 추출
+    * */
     @GetMapping("/v1/article-views/articles/{articleId}/count")
     public Long count(@PathVariable("articleId") Long articleId) {
         return articleViewService.count(articleId);

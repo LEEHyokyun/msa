@@ -9,19 +9,31 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/*
+* Redis에서의 조회수를 MySQL에 백업
+* */
 @Component
 @RequiredArgsConstructor
 public class ArticleViewCountBackUpProcessor {
     private final OutboxEventPublisher outboxEventPublisher;
     private final ArticleViewCountBackUpRepository articleViewCountBackUpRepository;
 
+    /*
+    * 백업과정
+    * */
     @Transactional
     public void backUp(Long articleId, Long viewCount) {
+        //update
         int result = articleViewCountBackUpRepository.updateViewCount(articleId, viewCount);
+
+        /*
+        * result = 0 -> 삽입된 데이터가 없으므로 초기 데이터 생성과정 필요
+        * */
         if (result == 0) {
             articleViewCountBackUpRepository.findById(articleId)
-                    .ifPresentOrElse(ignored -> { },
-                        () -> articleViewCountBackUpRepository.save(ArticleViewCount.init(articleId, viewCount))
+                    .ifPresentOrElse(
+                            ignored -> { }, //No Logic
+                        () -> articleViewCountBackUpRepository.save(ArticleViewCount.init(articleId, viewCount)) //Logic for No Data
                     );
         }
 

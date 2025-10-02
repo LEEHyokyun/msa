@@ -15,6 +15,9 @@ public class ViewApiTest {
         ExecutorService executorService = Executors.newFixedThreadPool(100);
         CountDownLatch latch = new CountDownLatch(10000);
 
+        /*
+        * 조회수 증가와 백업이 모두 하나의 API에서 이루어짐에 유의
+        * */
         for(int i=0; i<10000; i++) {
             executorService.submit(() -> {
                 restClient.post()

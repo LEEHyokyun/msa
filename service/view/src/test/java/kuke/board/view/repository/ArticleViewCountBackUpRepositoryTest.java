@@ -19,6 +19,9 @@ class ArticleViewCountBackUpRepositoryTest {
     @PersistenceContext
     EntityManager entityManager;
 
+    /*
+    * view count 백업 DB(MySQL)의 기능 동작 확인
+    * */
     @Test
     @Transactional
     void updateViewCountTest() {
@@ -26,6 +29,10 @@ class ArticleViewCountBackUpRepositoryTest {
         articleViewCountBackUpRepository.save(
                 ArticleViewCount.init(1L, 0L)
         );
+
+        /*
+        * entityManager를 활용한 데이터 영속화
+        * */
         entityManager.flush();
         entityManager.clear();
 
@@ -39,6 +46,9 @@ class ArticleViewCountBackUpRepositoryTest {
         assertThat(result2).isEqualTo(1);
         assertThat(result3).isEqualTo(0);
 
+        /*
+        * 동시성 확인
+        * */
         ArticleViewCount articleViewCount = articleViewCountBackUpRepository.findById(1L).get();
         assertThat(articleViewCount.getViewCount()).isEqualTo(300L);
     }
