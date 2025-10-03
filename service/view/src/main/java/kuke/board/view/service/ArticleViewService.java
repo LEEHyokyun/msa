@@ -35,9 +35,12 @@ public class ArticleViewService {
     * 데이터 백업까지
     * */
     public Long increase(Long articleId, Long userId) {
-//        if (!articleViewDistributedLockRepository.lock(articleId, userId, TTL)) {
-//            return articleViewCountRepository.read(articleId);
-//        }
+        /*
+        * 분산락 획득 실패시 증가처리를 하지 않고 현재 조회수 그대로 반환
+        * */
+        if (!articleViewDistributedLockRepository.lock(articleId, userId, TTL)) {
+            return articleViewCountRepository.read(articleId);
+        }
 
         /*
         * 조회수 처리
