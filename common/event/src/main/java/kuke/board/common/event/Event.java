@@ -14,6 +14,11 @@ import lombok.Getter;
 public class Event<T extends EventPayload> {
     private Long eventId;
     private EventType type;
+    /*
+     * Class<T extends EventPayload> - EventPayload의 서브타입이라는 구체타입을 지정해준 것.
+     * ?와 달리, 동일하게 하위클래스로 지정해준 것은 동일하지만
+     * 실제 인스턴스화 하여 사용 시에는 EventPayload 인터페이스를 구체화한 특정 형태 하나만을 사용해야 한다.
+     * */
     private T payload;
 
     /*

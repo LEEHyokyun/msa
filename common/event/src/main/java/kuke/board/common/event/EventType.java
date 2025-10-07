@@ -36,6 +36,11 @@ public enum EventType {
     * - Event들이 어떤 payload를 가지는지
     * - Event들이 어떤 topic으로 전달될 수 있는지
     * */
+    /*
+    * Class<? extends EventPayload> - EventPayload의 서브타입이라면 무엇이든 올 수 있음
+    * 즉, "구체타입"을 정하는 것이 아니라 다양한 형태의 하위 형태가 올 수 있음을 지정
+    * (인스턴스화하여 사용할때 EventPayload의 하위 형태 상관없이 구체화하여 사용가능함)
+    * */
     private final Class<? extends EventPayload> payloadClass;
     private final String topic;
 
