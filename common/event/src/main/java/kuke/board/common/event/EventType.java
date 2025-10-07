@@ -9,6 +9,18 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @RequiredArgsConstructor
 public enum EventType {
+    /*
+    * Event Type에 대한 정의
+    * - 게시글 생성
+    * - 게시글 수정
+    * - 게시글 삭제
+    * - 댓글 생성
+    * - 댓글 삭제
+    * - 게시글 좋아요 생성
+    * - 게시글 좋아요 취소
+    * - 조회(100개마다 이벤트 통신)
+    * 각 Event Type Class를 type/topic에 대입
+    * */
     ARTICLE_CREATED(ArticleCreatedEventPayload.class, Topic.KUKE_BOARD_ARTICLE),
     ARTICLE_UPDATED(ArticleUpdatedEventPayload.class, Topic.KUKE_BOARD_ARTICLE),
     ARTICLE_DELETED(ArticleDeletedEventPayload.class, Topic.KUKE_BOARD_ARTICLE),
@@ -19,9 +31,17 @@ public enum EventType {
     ARTICLE_VIEWED(ArticleViewedEventPayload.class, Topic.KUKE_BOARD_VIEW)
     ;
 
+    /*
+    * Enum이 관리하는 데이터 혹은 항목
+    * - Event들이 어떤 payload를 가지는지
+    * - Event들이 어떤 topic으로 전달될 수 있는지
+    * */
     private final Class<? extends EventPayload> payloadClass;
     private final String topic;
 
+    /*
+    * EventType
+    * */
     public static EventType from(String type) {
         try {
             return valueOf(type);
@@ -31,6 +51,9 @@ public enum EventType {
         }
     }
 
+    /*
+    * Topic
+    * */
     public static class Topic {
         public static final String KUKE_BOARD_ARTICLE = "kuke-board-article";
         public static final String KUKE_BOARD_COMMENT = "kuke-board-comment";

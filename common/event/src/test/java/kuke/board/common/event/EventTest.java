@@ -8,6 +8,13 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EventTest {
+
+    /*
+    * Kafka 통신을 위해
+    * Event 객체를 생성하는 Json 직렬화 과정
+    * Event 객체의 Json을 다시 Event로 역직렬화하여
+    * Kafka 통신을 하기 위한 준비가 되었는지 확인
+    * */
     @Test
     void serde() {
         // given
@@ -28,10 +35,17 @@ class EventTest {
                 payload
         );
 
+        /*
+        * kafka로 보내기 위해 Event 객체를 Json으로 직렬화
+        * (*Kafka가 데이터로그에 쌓는 메시지의 형태는 Json 등의 문자열 타입)
+        * */
         String json = event.toJson();
         System.out.println("json = " + json);
 
         // when
+        /*
+        * 위에서 보낸 Json 문자열을 Event 객체로 역직렬화
+        * */
         Event<EventPayload> result = Event.fromJson(json);
 
         // then

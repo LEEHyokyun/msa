@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+/*
+ * 각 Event 별로 가지는 payload 정의
+ * */
 public class CommentDeletedEventPayload implements EventPayload {
     private Long commentId;
     private String content;

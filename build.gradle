@@ -27,6 +27,9 @@ allprojects {
     }
 
     dependencies {
+        /*
+        * data serializer - JsonProcessingException / logging
+        * */
         implementation 'ch.qos.logback:logback-classic'
 
         compileOnly 'org.projectlombok:lombok'

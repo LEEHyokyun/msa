@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+/*
+ * 각 Event 별로 가지는 payload 정의
+ * */
 public class ArticleUpdatedEventPayload implements EventPayload {
     private Long articleId;
     private String title;
