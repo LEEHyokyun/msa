@@ -64,6 +64,9 @@ public class HotArticleListRepository {
         });
     }
 
+    /*
+    * 원본 게시글 삭제 시 Redis에서도 삭제
+    * */
     public void remove(Long articleId, LocalDateTime time) {
         redisTemplate.opsForZSet().remove(generateKey(time), String.valueOf(articleId));
     }
