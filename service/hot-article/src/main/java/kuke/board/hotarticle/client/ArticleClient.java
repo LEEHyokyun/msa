@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 public class ArticleClient {
+    /*
+    * 원본데이터 추출(API) -> 인기글 저장(Redis) -> 인기글 조회(Client)
+    * 실제 원본데이터를 추출하기위해 필요한 API 통신정보 구성 클래스
+    * */
     private RestClient restClient;
 
     @Value("${endpoints.kuke-board-article-service.url}")

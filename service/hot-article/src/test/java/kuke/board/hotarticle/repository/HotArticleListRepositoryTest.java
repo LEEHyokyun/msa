@@ -18,7 +18,7 @@ class HotArticleListRepositoryTest {
 
     @Test
     void addTest() throws InterruptedException {
-        // given
+        // given (*test : 3건의 인기글, 실제 유입은 5건인데 삭제가 되는지 확인)
         LocalDateTime time = LocalDateTime.of(2024, 7, 23, 0, 0);
         long limit = 3;
 
@@ -39,6 +39,9 @@ class HotArticleListRepositoryTest {
 
         TimeUnit.SECONDS.sleep(5);
 
+        /*
+        * TTL Test = 3, 5sec 이후엔 데이터 조회 불가
+        * */
         assertThat(hotArticleListRepository.readAll("20240723")).isEmpty();
     }
 }

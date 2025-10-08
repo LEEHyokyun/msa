@@ -9,10 +9,10 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: kuke-board-hot-article-service
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      enable-auto-commit: false
+      group-id: kuke-board-hot-article-service #인기글 선정 병렬 처리를 위한 group id 지정
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka 레벨 통신 시 직렬화
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #Kafka 레벨 통신 시 역직렬화
+      enable-auto-commit: false #다음에 읽을 offset 자동 commit 여부(메시지 유실 위험이 있어 false 설정)
 endpoints:
   kuke-board-article-service:
-    url: http://127.0.0.1:9000
+    url: http://127.0.0.1:9000 #실제 원본 데이터를 받아 세부내용을 추출하기 위한 API URL(end point)
