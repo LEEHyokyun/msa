@@ -17,8 +17,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+/*
+ * 단위테스트
+ * */
 @ExtendWith(MockitoExtension.class)
 class HotArticleScoreUpdaterTest {
+    /*
+    * 게시글이 오늘 생성된 것이 아니라면 인기글 집계를 하지 않는다.
+    * 오늘 생성된 것일때 인기글 집계 한다.
+    * */
     @InjectMocks
     HotArticleScoreUpdater hotArticleScoreUpdater;
     @Mock

@@ -6,6 +6,9 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+/*
+* 인기글 세부내역 조회 및 추출
+* */
 @Getter
 @ToString
 public class HotArticleResponse {

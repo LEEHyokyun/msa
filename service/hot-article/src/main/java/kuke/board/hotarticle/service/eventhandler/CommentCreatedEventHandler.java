@@ -8,6 +8,10 @@ import kuke.board.hotarticle.utils.TimeCalculatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/*
+ * 이벤트핸들러 구현체
+ * 전달받은 이벤트 객체 내역을 저장한다(해당 이벤트, 즉 게시글의 댓글 생성 시점을 저장)
+ * */
 @Component
 @RequiredArgsConstructor
 public class CommentCreatedEventHandler implements EventHandler<CommentCreatedEventPayload> {
@@ -25,9 +29,16 @@ public class CommentCreatedEventHandler implements EventHandler<CommentCreatedEv
 
     @Override
     public boolean supports(Event<CommentCreatedEventPayload> event) {
+        /*
+         * true of false
+         * 처리할 객체에 대해서만 지원
+         * */
         return EventType.COMMENT_CREATED == event.getType();
     }
 
+    /*
+     * article Id
+     * */
     @Override
     public Long findArticleId(Event<CommentCreatedEventPayload> event) {
         return event.getPayload().getArticleId();

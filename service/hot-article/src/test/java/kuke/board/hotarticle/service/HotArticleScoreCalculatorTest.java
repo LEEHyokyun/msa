@@ -14,8 +14,14 @@ import java.util.random.RandomGenerator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+/*
+* 단위테스트
+* */
 @ExtendWith(MockitoExtension.class)
 class HotArticleScoreCalculatorTest {
+    /*
+    * 가중치 계산 작동 확인
+    * */
     @InjectMocks
     HotArticleScoreCalculator hotArticleScoreCalculator;
     @Mock
