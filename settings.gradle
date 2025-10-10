@@ -1,5 +1,15 @@
 rootProject.name = 'kuke-board'
 
+/*
+* root project의 settings.gradle = 의존성 클래스 패스를 참고하기 위해 MSA 자체를 include
+* */
+/*
+* 그냥 포함해주는 것이 아니라
+* 각 MSA를 실행할때 MSA의 application.yml 환경설정정보를 각 common 클래스 등과 상호작용하기 위해
+* 예를 들어 application.yml의 정보를 @Value에 주입하기 위해
+* 또한 MSA 뿐만 아니라 스캔 대상을 의존하고 있는 모듈까지 그 범위를 넓히기 위함
+* root project에 각각의 MSA 및 common 의존성 정보를 그대로 참고하여 의존성 정보를 얻고자 함(=MD 기록하지 않고 프로젝트 레포지토리로 관리하는 것처럼)
+* */
 include 'common'
 include 'common:snowflake'
 include 'common:data-serializer'
