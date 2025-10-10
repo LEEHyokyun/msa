@@ -143,3 +143,8 @@
 - 이 보관한 데이터는 인기글 산정에 필요한 데이터로 하루가 지나면 폐기한다.
 
 ![img.png](img.png)
+
+[Outbox Pattern을 활용하여 분산 트랜잭션의 원자성과 데이터 일관성을 확보한다.]
+- 비즈니스 로직과 이벤트 메시지 전송을 단일 트랜잭션으로 구성한다.
+- 데이터 일관성 확보를 위한 Outbox Pattern 및 Message Relay를 구성하여 미전송/전송실패 이벤트 메시지를 처리한다.
+- Redis를 활용하여 application 실행 시 Message Relay를 통한 outbox polling 및 이벤트 메시지 처리 책임을 분산하여 맡는다.
