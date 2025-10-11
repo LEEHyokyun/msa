@@ -26,6 +26,9 @@ import static java.util.function.Predicate.not;
 public class CommentServiceV2 {
     private final Snowflake snowflake = new Snowflake();
     private final CommentRepositoryV2 commentRepository;
+    /*
+     * outbox pattern 로직 추가
+     * */
     private final OutboxEventPublisher outboxEventPublisher;
     private final ArticleCommentCountRepository articleCommentCountRepository;
 
@@ -65,6 +68,9 @@ public class CommentServiceV2 {
             );
         }
 
+        /*
+         * outbox pattern 로직 추가
+         * */
         outboxEventPublisher.publish(
                 EventType.COMMENT_CREATED,
                 CommentCreatedEventPayload.builder()
@@ -127,6 +133,9 @@ public class CommentServiceV2 {
                         delete(comment);
                     }
 
+                    /*
+                     * outbox pattern 로직 추가
+                     * */
                     outboxEventPublisher.publish(
                             EventType.COMMENT_DELETED,
                             CommentDeletedEventPayload.builder()

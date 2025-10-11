@@ -30,6 +30,9 @@ public class ArticleService {
     * */
     private final Snowflake snowflake = new Snowflake();
     private final ArticleRepository articleRepository;
+    /*
+    * outbox pattern 로직 추가
+    * */
     private final OutboxEventPublisher outboxEventPublisher;
     private final BoardArticleCountRepository boardArticleCountRepository;
 
@@ -53,6 +56,9 @@ public class ArticleService {
             );
         }
 
+        /*
+         * outbox pattern 로직 추가
+         * */
         outboxEventPublisher.publish(
                 EventType.ARTICLE_CREATED,
                 ArticleCreatedEventPayload.builder()
@@ -79,6 +85,10 @@ public class ArticleService {
         * 트랜잭션이 끝나는 시점에서 영속성 객체인 article(Repository를 통해 객체를 호출하였으므로)의 변화 감지(Dirty Checking)
         * SnapShot의 변화 감지 후 DB에 최종적으로 반영
         * */
+
+        /*
+         * outbox pattern 로직 추가
+         * */
         outboxEventPublisher.publish(
                 EventType.ARTICLE_UPDATED,
                 ArticleUpdatedEventPayload.builder()
@@ -107,6 +117,10 @@ public class ArticleService {
         Article article = articleRepository.findById(articleId).orElseThrow();
         articleRepository.delete(article);
         boardArticleCountRepository.decrease(article.getBoardId());
+
+        /*
+         * outbox pattern 로직 추가
+         * */
         outboxEventPublisher.publish(
                 EventType.ARTICLE_DELETED,
                 ArticleDeletedEventPayload.builder()

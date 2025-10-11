@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ArticleLikeService {
     private final Snowflake snowflake = new Snowflake();
+    /*
+     * outbox pattern 로직 추가
+     * */
     private final OutboxEventPublisher outboxEventPublisher;
     private final ArticleLikeRepository articleLikeRepository;
     private final ArticleLikeCountRepository articleLikeCountRepository;
@@ -80,6 +83,9 @@ public class ArticleLikeService {
             );
         }
 
+        /*
+         * outbox pattern 로직 추가
+         * */
         outboxEventPublisher.publish(
                 EventType.ARTICLE_LIKED,
                 ArticleLikedEventPayload.builder()
@@ -100,6 +106,10 @@ public class ArticleLikeService {
                     //delete -> row 수 반환, 0이라면 이미 삭제되어 이 로직을 진행할 필요 없음
                     articleLikeRepository.delete(articleLike);
                     articleLikeCountRepository.decrease(articleId);
+
+                    /*
+                     * outbox pattern 로직 추가
+                     * */
                     outboxEventPublisher.publish(
                             EventType.ARTICLE_UNLIKED,
                             ArticleUnlikedEventPayload.builder()

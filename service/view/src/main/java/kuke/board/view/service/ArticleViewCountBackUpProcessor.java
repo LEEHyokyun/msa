@@ -11,10 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 /*
 * Redis에서의 조회수를 MySQL에 백업
+* 백업시점에 outbox 동작 실행
 * */
 @Component
 @RequiredArgsConstructor
 public class ArticleViewCountBackUpProcessor {
+    /*
+     * outbox pattern 로직 추가
+     * */
     private final OutboxEventPublisher outboxEventPublisher;
     private final ArticleViewCountBackUpRepository articleViewCountBackUpRepository;
 
@@ -37,6 +41,9 @@ public class ArticleViewCountBackUpProcessor {
                     );
         }
 
+        /*
+         * outbox pattern 로직 추가
+         * */
         outboxEventPublisher.publish(
                 EventType.ARTICLE_VIEWED,
                 ArticleViewedEventPayload.builder()
