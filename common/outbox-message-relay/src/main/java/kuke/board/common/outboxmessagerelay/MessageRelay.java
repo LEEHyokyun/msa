@@ -54,6 +54,10 @@ public class MessageRelay {
     private void publishEvent(Outbox outbox) {
         try {
             /*
+            * 비동기처리가 아닌 트랜잭션 처리 이후의 동기적인 처리로
+            * 최초 서비스 요청 후 이벤트 발행, 해당 이벤트 발행 성공할 경우 즉각적인 outbox 메시지 삭제가 발생한다.
+            * */
+            /*
             * 동일 topic으로 partition에 메시지가 분산되어 붙는데
             * key가 동일하다면 동일한 partition에 붙어 이때 순차처리를 보장할 수 있다.
             * payload = data

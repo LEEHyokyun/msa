@@ -20,6 +20,9 @@ public class ArticleApiTest {
     @Test
     void createTest() {
         ArticleResponse response = create(new ArticleCreateRequest(
+                /*
+                * outbox test : 게시글 생성 시 outbox 데이터가 잘 저장되는가
+                * */
                 "hi", "my content", 1L, 1L
         ));
         System.out.println("response = " + response);
