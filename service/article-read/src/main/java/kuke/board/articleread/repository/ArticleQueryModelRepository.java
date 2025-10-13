@@ -14,6 +14,10 @@ import java.util.Optional;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+/*
+* articleQueryModel에서 정의한 상태변경을
+* 최종적으로 redis에 반영
+* */
 @Repository
 @RequiredArgsConstructor
 public class ArticleQueryModelRepository {
@@ -22,19 +26,36 @@ public class ArticleQueryModelRepository {
     // article-read::article::{articleId}
     private static final String KEY_FORMAT = "article-read::article::%s";
 
+    /*
+    * article query model을 받아 최초 생성
+    * - 신규 데이터 저장
+    * */
     public void create(ArticleQueryModel articleQueryModel, Duration ttl) {
         redisTemplate.opsForValue()
+                //serializer : Json
                 .set(generateKey(articleQueryModel), DataSerializer.serialize(articleQueryModel), ttl);
     }
-
+    
+    /*
+    * 데이터 수정
+    * */
     public void update(ArticleQueryModel articleQueryModel) {
+        //update - only query model(데이터가 있을 경우만 수정)
         redisTemplate.opsForValue().setIfPresent(generateKey(articleQueryModel), DataSerializer.serialize(articleQueryModel));
     }
 
+    /*
+    * 데이터 삭제
+    * */
     public void delete(Long articleId) {
         redisTemplate.delete(generateKey(articleId));
     }
 
+    /*
+    * 영속성 계층에서 DB의 데이터 추출결과가 아무것도 없을때(null)
+    * 이에 대한 대비를 해야하는 경우 Optional 사용
+    * 데이터 읽기
+    * */
     public Optional<ArticleQueryModel> read(Long articleId) {
         return Optional.ofNullable(
                 redisTemplate.opsForValue().get(generateKey(articleId))
