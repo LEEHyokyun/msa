@@ -6,6 +6,9 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 
+/*
+* 주도메인의 Kafka Config
+* */
 @Configuration
 public class KafkaConfig {
     @Bean
