@@ -7,7 +7,15 @@ import org.springframework.web.client.RestClient;
 
 import java.util.random.RandomGenerator;
 
+/*
+* article, comment, like, view 서비스에 대해 인기글 집계 서비스를 요청한다.
+* 최종적으로 4개의 서비스와 상호작용하여 인기글을 집계한다.
+* 이 집계 과정을 테스트하기 위함.
+* */
 public class DataInitializer {
+    /*
+    * 4개의 restClient
+    * */
     RestClient articleServiceClient = RestClient.create("http://localhost:9000");
     RestClient commentServiceClient = RestClient.create("http://localhost:9001");
     RestClient likeServiceClient = RestClient.create("http://localhost:9002");
@@ -15,6 +23,10 @@ public class DataInitializer {
 
     @Test
     void initialize() {
+        /*
+        * 데이터 30개 생성
+        * - 댓글 수, 좋아요 수, 조회 수
+        * */
         for(int i=0; i<30; i++) {
             Long articleId = createArticle();
             long commentCount = RandomGenerator.getDefault().nextLong(10);
@@ -36,6 +48,10 @@ public class DataInitializer {
                 .getArticleId();
     }
 
+    /*
+    * 철저하게 분리/독립적인 테스트 환경을 위해 중첩 클래스를 사용한다.
+    * = static
+    * */
     @Getter
     @AllArgsConstructor
     static class ArticleCreateRequest {
