@@ -19,6 +19,10 @@ public class ArticleCreatedEventHandler implements EventHandler<ArticleCreatedEv
     private final ArticleQueryModelRepository articleQueryModelRepository;
     private final BoardArticleCountRepository boardArticleCountRepository;
 
+    /*
+    * Consumer 측에서 이벤트를 "실시간" 전달받아 처리하기 위한 메소드
+    * 게시글 생성 이벤트에 대한 이벤트 핸들러, 게시글 생성후 1일 만료기간의 Redis 데이터를 생성.
+    * */
     @Override
     public void handle(Event<ArticleCreatedEventPayload> event) {
         ArticleCreatedEventPayload payload = event.getPayload();

@@ -16,6 +16,10 @@ public class ArticleDeletedEventHandler implements EventHandler<ArticleDeletedEv
     private final ArticleQueryModelRepository articleQueryModelRepository;
     private final BoardArticleCountRepository boardArticleCountRepository;
 
+    /*
+     * Consumer 측에서 이벤트를 "실시간" 전달받아 처리하기 위한 메소드
+     * 댓글 삭제 이벤트에 대한 이벤트 핸들러, 게시글 삭제 시 해당 데이터도 redis에서 삭제
+     * */
     @Override
     public void handle(Event<ArticleDeletedEventPayload> event) {
         ArticleDeletedEventPayload payload = event.getPayload();
