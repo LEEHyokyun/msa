@@ -14,14 +14,17 @@ class ViewClientTest {
     @Autowired
     ViewClient viewClient;
 
+    /*
+    * 캐싱 동작에 대한 테스트
+    * */
     @Test
     void readCacheableTest() throws InterruptedException {
-        viewClient.count(1L); // 로그 출력
-        viewClient.count(1L); // 로그 미출력
-        viewClient.count(1L); // 로그 미출력
+        viewClient.count(1L); // 로그 출력(캐시 데이터가 없으므로)
+        viewClient.count(1L); // 로그 미출력(캐시 데이터가 있으므로)
+        viewClient.count(1L); // 로그 미출력(캐시 데이터가 있으므로)
 
         TimeUnit.SECONDS.sleep(3);
-        viewClient.count(1L); // 로그 출력
+        viewClient.count(1L); // 로그 출력(캐시 데이터가 없으므로(만료))
     }
 
     @Test

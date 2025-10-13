@@ -39,6 +39,11 @@ public class ViewClient {
      * = Redis ?
      * = 일단은 MySQL에서 추출
      * */
+    /*
+    * cacheable -> articleId로 받은 매개변수를 그대로 key로 사용(=> key = #articleId), 마찬가지로 value = 반환값
+    * caching AOP로 인해 먼저 Redis에서 해당 key값의 데이터를 조회해오고, 없으면 원본데이터(로직) 추출 진행
+    * 이떄 redis에서 해당 count 추출, 없다면 원본데이터 요청하여 추출
+    * */
 //    @Cacheable(key = "#articleId", value = "articleViewCount")
     @OptimizedCacheable(type = "articleViewCount", ttlSeconds = 1)
     public long count(Long articleId) {
