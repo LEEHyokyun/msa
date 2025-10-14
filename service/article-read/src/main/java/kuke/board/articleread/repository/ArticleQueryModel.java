@@ -22,6 +22,10 @@ public class ArticleQueryModel {
     private LocalDateTime modifiedAt;
     private Long articleCommentCount;
     private Long articleLikeCount;
+    /*
+    * 조회수 -> Event로 전달받는 것이 아닌 Redis에서 직접 전달받는다.
+    * DTO != Response .. 책임분리 명확히.
+    * */
 
     /*
     * 게시글 생성 이벤트 발생 시
