@@ -4,6 +4,9 @@ import lombok.Getter;
 
 import java.util.List;
 
+/*
+* 페이징 쿼리용 Reponse DTO
+* */
 @Getter
 public class ArticleReadPageResponse {
     private List<ArticleReadResponse> articles;

@@ -9,6 +9,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+/*
+* 다른 도메인에서 데이터 추출 시 사용하며, Service layer에서 이를 참조.
+* */
 @Slf4j
 @Component
 @RequiredArgsConstructor

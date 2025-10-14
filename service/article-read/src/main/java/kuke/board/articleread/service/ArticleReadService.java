@@ -18,10 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /*
 * 최종 Article Read Service layer 구성
@@ -77,7 +74,7 @@ public class ArticleReadService {
     /*
     * 원본 데이터를 요청
     * - 있다면 article query model 생성(article + comment + like)
-    * -
+    * - 내부적으로 사용하는 메서드..일단 ArticleQueryModel로 변환
     * */
     private Optional<ArticleQueryModel> fetch(Long articleId) {
         Optional<ArticleQueryModel> articleQueryModelOptional = articleClient.read(articleId)
@@ -96,6 +93,9 @@ public class ArticleReadService {
         return articleQueryModelOptional;
     }
 
+    /*
+    * 기본적인 페이징 쿼리
+    * */
     public ArticleReadPageResponse readAll(Long boardId, Long page, Long pageSize) {
         return ArticleReadPageResponse.of(
                 readAll(
@@ -105,7 +105,16 @@ public class ArticleReadService {
         );
     }
 
+    /*
+    * article id 목록을 받아와 최종적인 게시글 목록을 조회한다.
+    * */
     private List<ArticleReadResponse> readAll(List<Long> articleIds) {
+        /*
+        * 내부적으로 사용하는 메서드..일단 ArticleQueryModel로 변환
+        * article id - 해당하는 게시글 내역을 조회해온 상태(article query model)
+        * 조회하고싶은 내역들(매개변수 articleIds)이 articleQueryModel에 있으면 그대로 내용 반환
+        * 없다면 fetch하여 원본데이터 반환
+        * */
         Map<Long, ArticleQueryModel> articleQueryModelMap = articleQueryModelRepository.readAll(articleIds);
         return articleIds.stream()
                 .map(articleId -> articleQueryModelMap.containsKey(articleId) ?
@@ -120,18 +129,31 @@ public class ArticleReadService {
                 .toList();
     }
 
+    /*
+    * 페이징 쿼리를 위해 필요한 id 목록 조회
+    * */
     private List<Long> readAllArticleIds(Long boardId, Long page, Long pageSize) {
+        /*
+        * 최초 : Redis에 있는 것 그대로 반환
+        * */
         List<Long> articleIds = articleIdListRepository.readAll(boardId, (page - 1) * pageSize, pageSize);
         if (pageSize == articleIds.size()) {
             log.info("[ArticleReadService.readAllArticleIds] return redis data.");
             return articleIds;
         }
+        /*
+        * Redis에 없으면 : 원본 추출
+        * */
         log.info("[ArticleReadService.readAllArticleIds] return origin data.");
         return articleClient.readAll(boardId, page, pageSize).getArticles().stream()
                 .map(ArticleClient.ArticleResponse::getArticleId)
                 .toList();
     }
 
+    /*
+    * 게시글 개수 추출하기
+    * - redis, 없으면 원본데이터 추출
+    * */
     private long count(Long boardId) {
         Long result = boardArticleCountRepository.read(boardId);
         if (result != null) {
@@ -142,12 +164,20 @@ public class ArticleReadService {
         return count;
     }
 
+    /*
+    * 무한스크롤 게시글 목록 조회
+    * */
     public List<ArticleReadResponse> readAllInfiniteScroll(Long boardId, Long lastArticleId, Long pageSize) {
         return readAll(
                 readAllInfiniteScrollArticleIds(boardId, lastArticleId, pageSize)
         );
     }
 
+    /*
+    * board id에 대한 최신 게시글 목록을 먼저 조회,
+    * 조건 부합시 redis에서 보여주고
+    * 없으면 원본 데이터 추출
+    * */
     private List<Long> readAllInfiniteScrollArticleIds(Long boardId, Long lastArticleId, Long pageSize) {
         List<Long> articleIds = articleIdListRepository.readAllInfiniteScroll(boardId, lastArticleId, pageSize);
         if (pageSize == articleIds.size()) {

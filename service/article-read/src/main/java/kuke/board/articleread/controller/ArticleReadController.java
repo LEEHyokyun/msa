@@ -24,6 +24,9 @@ public class ArticleReadController {
         return articleReadService.read(articleId);
     }
 
+    /*
+    * 게시글 목록 조회 - 페이징
+    * */
     @GetMapping("/v1/articles")
     public ArticleReadPageResponse readAll(
             @RequestParam("boardId") Long boardId,
@@ -33,6 +36,9 @@ public class ArticleReadController {
         return articleReadService.readAll(boardId, page, pageSize);
     }
 
+    /*
+    * 게시글 목록 조회 - 무한스크롤
+    * */
     @GetMapping("/v1/articles/infinite-scroll")
     public List<ArticleReadResponse> readAllInfiniteScroll(
             @RequestParam("boardId") Long boardId,

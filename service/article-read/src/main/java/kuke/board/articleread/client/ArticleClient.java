@@ -17,6 +17,7 @@ import java.util.Optional;
 
 /*
 * Command 서버로 데이터를 요청하기 위한 Client 객체
+* 다른 도메인에서 데이터 추출 시 사용하며, Service layer에서 이를 참조.
 * */
 @Slf4j
 @Component
@@ -62,6 +63,10 @@ public class ArticleClient {
         }
     }
 
+    /*
+    * 목록조회기능 추가 : 페이징
+    * 원본데이터를 얻는 restClient 기본적으로 필요(Redis에 없을 경우)
+    * */
     public ArticlePageResponse readAll(Long boardId, Long page, Long pageSize) {
         try {
             return restClient.get()
@@ -74,6 +79,10 @@ public class ArticleClient {
         }
     }
 
+    /*
+     * 목록조회기능 추가 : 무한스크롤
+     * 원본데이터를 얻는 restClient 기본적으로 필요(Redis에 없을 경우)
+     * */
     public List<ArticleResponse> readAllInfiniteScroll(Long boardId, Long lastArticleId, Long pageSize) {
         try {
             return restClient.get()
@@ -93,6 +102,9 @@ public class ArticleClient {
         }
     }
 
+    /*
+    * 페이징 쿼리에서 사용하는 전체 게시글 수 추출
+    * */
     public long count(Long boardId) {
         try {
             return restClient.get()

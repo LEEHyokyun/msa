@@ -30,7 +30,14 @@ public class ArticleCreatedEventHandler implements EventHandler<ArticleCreatedEv
                 ArticleQueryModel.create(payload),
                 Duration.ofDays(1)
         );
+        /*
+        * 게시글 생성 시점에 게시글 목록에 대한 내역을 Redis에 저장
+        * 1000개까지만 저장한다(즉, 저장 후 역정렬 순으로 1000개만 저장, 나머지는 삭제).
+        * */
         articleIdListRepository.add(payload.getBoardId(), payload.getArticleId(), 1000L);
+        /*
+        * 게시글 목록 개수도 같이 반영
+        * */
         boardArticleCountRepository.createOrUpdate(payload.getBoardId(), payload.getBoardArticleCount());
     }
 

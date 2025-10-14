@@ -70,11 +70,23 @@ public class ArticleQueryModelRepository {
         return KEY_FORMAT.formatted(articleId);
     }
 
+    /*
+    * articleIds -> keyList 만들어서 "내역들 조회"(=multiGet) -> 최종 ArticleQueryModel로 역직렬화 후
+    * */
     public Map<Long, ArticleQueryModel> readAll(List<Long> articleIds) {
         List<String> keyList = articleIds.stream().map(this::generateKey).toList();
         return redisTemplate.opsForValue().multiGet(keyList).stream()
+                /*
+                * article id를 통해 Redis 조회가능한 keyList화 후, 해당 key값에 해당하는 데이터 조회
+                * */
                 .filter(Objects::nonNull)
+                /*
+                * 이중 Null이 아닌 데이터를 필터링하여 ArticleQuery Class로 역직렬화
+                 * */
                 .map(json -> DataSerializer.deserialize(json, ArticleQueryModel.class))
+                /*
+                * 이후 key - 객체자체(identity()) Map화하여 수집한다.
+                 * */
                 .collect(toMap(ArticleQueryModel::getArticleId, identity()));
     }
 }

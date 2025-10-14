@@ -23,8 +23,20 @@ public class ArticleDeletedEventHandler implements EventHandler<ArticleDeletedEv
     @Override
     public void handle(Event<ArticleDeletedEventPayload> event) {
         ArticleDeletedEventPayload payload = event.getPayload();
+        /*
+         * 게시글 삭제 시 해당 게시글을 redis에서 삭제
+         * */
         articleIdListRepository.delete(payload.getBoardId(), payload.getArticleId());
+        /*
+        * 게시글 내역을 온전하게 삭제한 후 queyModel에서 삭제한다.
+        * 이 게시글을 삭제하는 시점에 다른 사용자가 조회한다면, queryModel에서 제거 후 commit까지 해야 안보일 수 있기에,
+        * 다시 말해 삭제시점에 다른 사용자가 보면 안되므로 -> articleQueryModle 먼저,
+        * 삭제시점에 다른 사용자가 보아도 무방 -> 지금처럼 articleIdListRepository 먼저
+        * */
         articleQueryModelRepository.delete(payload.getArticleId());
+        /*
+         * 게시글 삭제 시점에 게시글 목록에 대한 내역을 Redis에 저장
+         * */
         boardArticleCountRepository.createOrUpdate(payload.getBoardId(), payload.getBoardArticleCount());
     }
 
