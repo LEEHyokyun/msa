@@ -12,16 +12,39 @@ public class ArticleReadApiTest {
     RestClient articleReadRestClient = RestClient.create("http://localhost:9005");
     RestClient articleRestClient = RestClient.create("http://localhost:9000");
 
+    /*
+    * redis에서 articleQueryModel을 저장하여 MySQL을 경유하지 않고 바로 읽는다.
+    * - fetch 로그가 없어야 하며
+    * - redis에서 읽기 기능이 정상적으로 작동하는지 확인
+    * */
     @Test
-    void readTest() {
+    void readTestByArticleQueryModel() {
         ArticleReadResponse response = articleReadRestClient.get()
-                .uri("/v1/articles/{articleId}", 121558005770702848L)
+                .uri("/v1/articles/{articleId}", 236371812009361408L)
                 .retrieve()
                 .body(ArticleReadResponse.class);
 
         System.out.println("response = " + response);
     }
 
+    /*
+     * redis에서 articleQueryModel을 저장하여 MySQL을 경유한다.
+     * - fetch 로그가 남겨져야 한다.
+     * */
+    @Test
+    void readTestByMySQLRawData() {
+        ArticleReadResponse response = articleReadRestClient.get()
+                .uri("/v1/articles/{articleId}", 229089422410231808L)
+                .retrieve()
+                .body(ArticleReadResponse.class);
+
+        System.out.println("response = " + response);
+    }
+    /*
+     * redis에서 articleQueryModel을 저장하여 MySQL을 경유하지 않고 바로 읽는다.
+     * - fetch 로그가 없어야 하며
+     * - redis에서 읽기 기능이 정상적으로 작동하는지 확인
+     * */
     @Test
     void readAllTest() {
         ArticleReadPageResponse response1 = articleReadRestClient.get()
