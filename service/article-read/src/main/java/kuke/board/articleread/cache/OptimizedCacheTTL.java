@@ -4,6 +4,11 @@ import lombok.Getter;
 
 import java.time.Duration;
 
+/*
+* 정책적으로 정한 logcial TTL보다
+* 실제 데이터 존재시간인 physical TTL을 더 길게 설정하도록 해주는 클래스
+* physical TTL = logical TTL + 5sec.
+* */
 @Getter
 public class OptimizedCacheTTL {
     private Duration logicalTTL;

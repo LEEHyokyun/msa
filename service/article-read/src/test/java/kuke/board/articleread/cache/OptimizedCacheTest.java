@@ -17,7 +17,13 @@ class OptimizedCacheTest {
         parseDataTest(new TestClass("hihi"), 10);
     }
 
+    /*
+    * 직렬화/역직렬화(parse 메서드) 테스트
+    * */
     void parseDataTest(Object data, long ttlSeconds) {
+        /*
+        * data -> long/string/class 모두 테스트 가능, 간단하게 먼저 테스트한다.
+        * */
         // given
         OptimizedCache optimizedCache = OptimizedCache.of(data, Duration.ofSeconds(ttlSeconds));
         System.out.println("optimizedCache = " + optimizedCache);
@@ -30,6 +36,9 @@ class OptimizedCacheTest {
         assertThat(resolvedData).isEqualTo(data);
     }
 
+    /*
+    * 만료메서드 확인
+    * */
     @Test
     void isExpiredTest() {
         assertThat(OptimizedCache.of("data", Duration.ofDays(-30)).isExpired()).isTrue();

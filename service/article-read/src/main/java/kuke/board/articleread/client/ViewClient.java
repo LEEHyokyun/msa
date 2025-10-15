@@ -48,6 +48,9 @@ public class ViewClient {
     * 이떄 redis에서 해당 count 추출, 없다면 원본데이터 요청하여 추출
     * */
 //    @Cacheable(key = "#articleId", value = "articleViewCount")
+    /*
+    * Caching Aspect의 적용 대상(포인트컷)
+    * */
     @OptimizedCacheable(type = "articleViewCount", ttlSeconds = 1)
     public long count(Long articleId) {
         log.info("[ViewClient.count] articleId={}", articleId);

@@ -6,6 +6,9 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/*
+* logical TTL / physical TTL 테스트
+* */
 class OptimizedCacheTTLTest {
     @Test
     void ofTest() {
