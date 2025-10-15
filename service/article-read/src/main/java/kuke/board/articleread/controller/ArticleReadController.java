@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /*
-* 최종 rest api
+* 최종 rest api .. 조회대상
 * */
 @RestController
 @RequiredArgsConstructor
