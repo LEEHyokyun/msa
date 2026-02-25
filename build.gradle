@@ -1,11 +1,15 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.2'
+    id 'org.springframework.boot' version '3.5.0'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'kuke'
+group = 'cloud-native-msa'
 version = '1'
+
+ext{
+    springCloudVersion = "2025.0.1"
+}
 
 /*
 * MSA(Multi Module) Procject를 구성
@@ -15,6 +19,13 @@ version = '1'
 allprojects {
     repositories {
         mavenCentral()
+    }
+
+    //Cloud는 BOM 수동 관리 대상
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
     }
 
     apply plugin: 'java'
@@ -27,6 +38,11 @@ allprojects {
     }
 
     dependencies {
+        /*
+        * Spring Cloud
+        * */
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+
         /*
         * data serializer - JsonProcessingException / logging
         * */
