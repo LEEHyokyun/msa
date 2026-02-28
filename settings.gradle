@@ -1,4 +1,4 @@
-rootProject.name = 'cloud-native-msa'
+rootProject.name = 'cloud-native-msa-init'
 
 /*
 * root project의 settings.gradle = 의존성 클래스 패스를 참고하기 위해 MSA 자체를 include
